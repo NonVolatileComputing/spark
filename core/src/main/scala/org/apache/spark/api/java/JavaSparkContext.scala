@@ -39,6 +39,10 @@ import org.apache.spark.api.java.JavaSparkContext.fakeClassTag
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.{EmptyRDD, HadoopRDD, NewHadoopRDD, RDD}
 
+import com.intel.bigdatamem.GenericField
+import com.intel.bigdatamem.EntityFactoryProxy
+
+
 /**
  * A Java-friendly version of [[org.apache.spark.SparkContext]] that returns
  * [[org.apache.spark.api.java.JavaRDD]]s and works with Java collections instead of Scala ones.
@@ -182,7 +186,15 @@ class JavaSparkContext(val sc: SparkContext)
    * Hadoop-supported file system URI, and return it as an RDD of Strings.
    */
   def textFile(path: String): JavaRDD[String] = sc.textFile(path)
+  
+  def pmemListDS[T: ClassTag](path: String, gfTypes: Array[GenericField.GType], 
+    efProxies: Array[EntityFactoryProxy],
+    slotKeyId: Long) = sc.pmemListDS[T](path, gfTypes, efProxies, slotKeyId)
 
+  def pmemLinkedDS[T: ClassTag](path: String, gfTypes: Array[GenericField.GType], 
+    efProxies: Array[EntityFactoryProxy],
+    slotKeyId: Long) = sc.pmemLinkedDS[T](path, gfTypes, efProxies, slotKeyId)
+    
   /**
    * Read a text file from HDFS, a local file system (available on all nodes), or any
    * Hadoop-supported file system URI, and return it as an RDD of Strings.

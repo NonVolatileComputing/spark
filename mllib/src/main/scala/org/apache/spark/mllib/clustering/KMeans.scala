@@ -350,7 +350,7 @@ class KMeans private (
   private def initRandom(data: RDD[VectorWithNorm])
   : Array[Array[VectorWithNorm]] = {
     // Sample all the cluster centers in one pass to avoid repeated scans
-    val sample = data.takeSample(true, runs * k, new XORShiftRandom(this.seed).nextInt()).toSeq
+    val sample = data.takeSample(true, runs * k, 42/*new XORShiftRandom(this.seed).nextInt()*/).toSeq
     Array.tabulate(runs)(r => sample.slice(r * k, (r + 1) * k).map { v =>
       new VectorWithNorm(Vectors.dense(v.vector.toArray), v.norm)
     }.toArray)
@@ -373,7 +373,7 @@ class KMeans private (
 
     // Initialize each run's first center to a random point.
     val seed = new XORShiftRandom(this.seed).nextInt()
-    val sample = data.takeSample(true, runs, seed).toSeq
+    val sample = data.takeSample(true, runs, 42/*seed*/).toSeq
     val newCenters = Array.tabulate(runs)(r => ArrayBuffer(sample(r).toDense))
 
     /** Merges new centers to centers. */

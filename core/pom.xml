@@ -34,6 +34,11 @@
   <name>Spark Project Core</name>
   <url>http://spark.apache.org/</url>
   <dependencies>
+  	<dependency>
+      <groupId>com.intel.bigdatamem.collections</groupId>
+      <artifactId>bdmemgeneric</artifactId>
+      <version>1.6.6-SNAPSHOT</version>
+  	</dependency>
     <dependency>
       <groupId>org.apache.avro</groupId>
       <artifactId>avro-mapred</artifactId>

@@ -65,6 +65,10 @@ import org.apache.spark.ui.{SparkUI, ConsoleProgressBar}
 import org.apache.spark.ui.jobs.JobProgressListener
 import org.apache.spark.util._
 
+import com.intel.bigdatamem.GenericField
+import com.intel.bigdatamem.EntityFactoryProxy
+
+
 /**
  * Main entry point for Spark functionality. A SparkContext represents the connection to a Spark
  * cluster, and can be used to create RDDs, accumulators and broadcast variables on that cluster.
@@ -1013,6 +1017,22 @@ class SparkContext(config: SparkConf) extends Logging with ExecutorAllocationCli
       keyClass,
       valueClass,
       minPartitions).setName(path)
+  }
+  
+  def pmemListDS[T: ClassTag](path: String, gfTypes: Array[GenericField.GType], 
+    efProxies: Array[EntityFactoryProxy],
+    slotKeyId: Long):PMemListDSRDD[T] = withScope {
+      assertNotStopped()
+      new PMemListDSRDD[T](this, path, gfTypes,
+        efProxies, slotKeyId)
+  }
+  
+  def pmemLinkedDS[T: ClassTag](path: String, gfTypes: Array[GenericField.GType], 
+    efProxies: Array[EntityFactoryProxy],
+    slotKeyId: Long):PMemLinkedDSRDD[T] = withScope {
+      assertNotStopped()
+      new PMemLinkedDSRDD[T](this, path, gfTypes,
+        efProxies, slotKeyId)
   }
 
   /**

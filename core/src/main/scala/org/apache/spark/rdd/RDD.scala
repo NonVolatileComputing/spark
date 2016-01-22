@@ -473,7 +473,7 @@ abstract class RDD[T: ClassTag](
   def takeSample(
       withReplacement: Boolean,
       num: Int,
-      seed: Long = Utils.random.nextLong): Array[T] = {
+      seed: Long = 42 /*Utils.random.nextLong*/): Array[T] = {
     val numStDev = 10.0
 
     if (num < 0) {
